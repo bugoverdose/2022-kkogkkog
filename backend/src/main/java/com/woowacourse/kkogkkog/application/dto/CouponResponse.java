@@ -1,6 +1,7 @@
 package com.woowacourse.kkogkkog.application.dto;
 
 import com.woowacourse.kkogkkog.domain.Coupon;
+import com.woowacourse.kkogkkog.domain.CouponDemo;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,5 +35,11 @@ public class CouponResponse {
         return new CouponResponse(coupon.getId(), coupon.getSender().getName(), coupon.getReceiver().getName(),
                 coupon.getBackgroundColor(), coupon.getModifier(), coupon.getMessage(),
                 coupon.getCouponType().getValue(), coupon.getCouponStatus().name());
+    }
+
+    public static CouponResponse of(CouponDemo coupon) {
+        return new CouponResponse(coupon.getId(), coupon.getSender(), coupon.getReceiver(),
+            coupon.getBackgroundColor(), coupon.getModifier(), coupon.getMessage(),
+            coupon.getCouponType(), coupon.getCouponStatus());
     }
 }
