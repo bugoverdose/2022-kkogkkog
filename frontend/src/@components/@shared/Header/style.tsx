@@ -19,6 +19,10 @@ export const Root = styled.div`
   font-weight: bold;
 
   border-radius: 4px 4px 0 0;
+
+  box-shadow: 0 4px 4px 0 #00000025;
+
+  z-index: 99999;
 `;
 
 export const Logo = styled.div``;
