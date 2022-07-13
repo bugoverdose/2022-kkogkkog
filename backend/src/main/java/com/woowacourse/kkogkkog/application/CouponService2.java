@@ -27,6 +27,26 @@ public class CouponService2 {
         this.memberRepository = memberRepository;
     }
 
+    public List<CouponResponse2> findAllBySender(Long senderId) {
+        return couponRepository.findAllBySender(findMember(senderId))
+                .stream()
+                .map(CouponResponse2::of)
+                .collect(Collectors.toList());
+    }
+
+    public List<CouponResponse2> findAllByReceiver(Long receiverId) {
+        return couponRepository.findAllByReceiver(findMember(receiverId))
+                .stream()
+                .map(CouponResponse2::of)
+                .collect(Collectors.toList());
+    }
+
+    public CouponResponse2 findById(Long couponId) {
+        Coupon coupon = couponRepository.findById(couponId)
+                .orElseThrow(CouponNotFoundException::new);
+        return CouponResponse2.of(coupon);
+    }
+
     public List<CouponResponse2> save(CouponSaveRequest couponSaveRequest) {
         List<Coupon> coupons = toCoupons(couponSaveRequest);
         List<Coupon> savedCoupons = couponRepository.saveAll(coupons);
@@ -54,26 +74,6 @@ public class CouponService2 {
             throw new MemberNotFoundException();
         }
         return receivers;
-    }
-
-    public List<CouponResponse2> findAllBySender(Long senderId) {
-        return couponRepository.findAllBySender(findMember(senderId))
-                .stream()
-                .map(CouponResponse2::of)
-                .collect(Collectors.toList());
-    }
-
-    public List<CouponResponse2> findAllByReceiver(Long receiverId) {
-        return couponRepository.findAllByReceiver(findMember(receiverId))
-                .stream()
-                .map(CouponResponse2::of)
-                .collect(Collectors.toList());
-    }
-
-    public CouponResponse2 findById(Long couponId) {
-        Coupon coupon = couponRepository.findById(couponId)
-                .orElseThrow(CouponNotFoundException::new);
-        return CouponResponse2.of(coupon);
     }
 
     private Member findMember(Long memberId) {

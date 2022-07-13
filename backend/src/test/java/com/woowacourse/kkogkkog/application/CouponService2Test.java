@@ -44,40 +44,6 @@ public class CouponService2Test extends DatabaseTest {
         memberRepository.save(레오);
     }
 
-    @DisplayName("복수의 쿠폰을 저장할 수 있다")
-    @Nested
-    class SaveTest {
-
-        @Test
-        @DisplayName("받는 사람으로 지정한 사용자들에게 동일한 내용의 쿠폰이 발급된다.")
-        void save() {
-            CouponSaveRequest couponSaveRequest = toCouponSaveRequest(루키, List.of(아서, 정, 레오));
-            List<CouponResponse2> createdCoupons = couponService.save(couponSaveRequest);
-
-            assertThat(createdCoupons.size()).isEqualTo(3);
-        }
-
-        @Test
-        @DisplayName("존재하지 않는 사용자가 쿠폰을 보내려는 경우 예외가 발생한다.")
-        void senderNotFound() {
-            Member 존재하지_않는_사용자 = new Member(10000L, "DB에 없는 사용자");
-            CouponSaveRequest couponSaveRequest = toCouponSaveRequest(존재하지_않는_사용자, List.of(아서, 레오));
-
-            assertThatThrownBy(() -> couponService.save(couponSaveRequest))
-                    .isInstanceOf(MemberNotFoundException.class);
-        }
-
-        @Test
-        @DisplayName("존재하지 않는 사용자에게 쿠폰을 보내려는 경우 예외가 발생한다.")
-        void receiverNotFound() {
-            Member 존재하지_않는_사용자 = new Member(10000L, "DB에 없는 사용자");
-            CouponSaveRequest couponSaveRequest = toCouponSaveRequest(정, List.of(아서, 존재하지_않는_사용자));
-
-            assertThatThrownBy(() -> couponService.save(couponSaveRequest))
-                    .isInstanceOf(MemberNotFoundException.class);
-        }
-    }
-
     @DisplayName("사용자가 보낸 쿠폰들을 조회할 수 있다.")
     @Nested
     class FindBySenderTest {
@@ -160,6 +126,40 @@ public class CouponService2Test extends DatabaseTest {
         void findById_notFound() {
             assertThatThrownBy(() -> couponService.findById(1L))
                     .isInstanceOf(CouponNotFoundException.class);
+        }
+    }
+
+    @DisplayName("복수의 쿠폰을 저장할 수 있다")
+    @Nested
+    class SaveTest {
+
+        @Test
+        @DisplayName("받는 사람으로 지정한 사용자들에게 동일한 내용의 쿠폰이 발급된다.")
+        void save() {
+            CouponSaveRequest couponSaveRequest = toCouponSaveRequest(루키, List.of(아서, 정, 레오));
+            List<CouponResponse2> createdCoupons = couponService.save(couponSaveRequest);
+
+            assertThat(createdCoupons.size()).isEqualTo(3);
+        }
+
+        @Test
+        @DisplayName("존재하지 않는 사용자가 쿠폰을 보내려는 경우 예외가 발생한다.")
+        void senderNotFound() {
+            Member 존재하지_않는_사용자 = new Member(10000L, "DB에 없는 사용자");
+            CouponSaveRequest couponSaveRequest = toCouponSaveRequest(존재하지_않는_사용자, List.of(아서, 레오));
+
+            assertThatThrownBy(() -> couponService.save(couponSaveRequest))
+                    .isInstanceOf(MemberNotFoundException.class);
+        }
+
+        @Test
+        @DisplayName("존재하지 않는 사용자에게 쿠폰을 보내려는 경우 예외가 발생한다.")
+        void receiverNotFound() {
+            Member 존재하지_않는_사용자 = new Member(10000L, "DB에 없는 사용자");
+            CouponSaveRequest couponSaveRequest = toCouponSaveRequest(정, List.of(아서, 존재하지_않는_사용자));
+
+            assertThatThrownBy(() -> couponService.save(couponSaveRequest))
+                    .isInstanceOf(MemberNotFoundException.class);
         }
     }
 
