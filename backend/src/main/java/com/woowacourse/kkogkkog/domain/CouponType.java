@@ -4,6 +4,7 @@ import com.woowacourse.kkogkkog.exception.coupon.CouponTypeNotFoundException;
 import java.util.Arrays;
 import lombok.Getter;
 
+// TODO: delete value field
 @Getter
 public enum CouponType {
 

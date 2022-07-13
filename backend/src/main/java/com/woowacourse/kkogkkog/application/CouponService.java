@@ -28,6 +28,7 @@ public class CouponService {
         this.memberRepository = memberRepository;
     }
 
+    // TODO: should be replaced
     public Long save(CouponCreateRequest couponCreateRequest) {
         Coupon coupon = saveCoupon(couponCreateRequest);
         Coupon savedCoupon = couponRepository.save(coupon);
