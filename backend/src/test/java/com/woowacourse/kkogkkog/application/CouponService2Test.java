@@ -8,6 +8,7 @@ import com.woowacourse.kkogkkog.application.dto.CouponSaveRequest;
 import com.woowacourse.kkogkkog.application.dto.CouponResponse2;
 import com.woowacourse.kkogkkog.domain.Member;
 import com.woowacourse.kkogkkog.domain.repository.MemberRepository;
+import com.woowacourse.kkogkkog.exception.coupon.CouponNotFoundException;
 import com.woowacourse.kkogkkog.exception.member.MemberNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -77,7 +78,7 @@ public class CouponService2Test extends DatabaseTest {
         }
     }
 
-    @DisplayName("사용자가 보낸 쿠폰들이 조회된다.")
+    @DisplayName("사용자가 보낸 쿠폰들을 조회할 수 있다.")
     @Nested
     class FindBySenderTest {
 
@@ -108,12 +109,12 @@ public class CouponService2Test extends DatabaseTest {
         }
     }
 
-    @DisplayName("사용자가 받은 쿠폰들이 조회된다.")
+    @DisplayName("사용자가 받은 쿠폰들을 조회할 수 있다.")
     @Nested
     class FindByReceiverTest {
 
-        @DisplayName("조회되는 쿠폰 개수 확인")
         @Test
+        @DisplayName("조회되는 쿠폰 개수 확인")
         void couponCount() {
             couponService.save(toCouponSaveRequest(아서, List.of(정, 레오)));
             couponService.save(toCouponSaveRequest(레오, List.of(정, 아서)));
@@ -136,6 +137,29 @@ public class CouponService2Test extends DatabaseTest {
             List<Long> expected = List.of(receiverId, receiverId);
 
             assertThat(actual).isEqualTo(expected);
+        }
+    }
+
+    @DisplayName("단일 쿠폰을 조회할 수 있다.")
+    @Nested
+    class FindByIdTest {
+
+        @DisplayName("존재하는 쿠폰을 조회하는 경우 성공한다.")
+        @Test
+        void findById() {
+            List<CouponResponse2> savedCoupons = couponService.save(toCouponSaveRequest(레오, List.of(정, 루키)));
+
+            CouponResponse2 expected = savedCoupons.get(0);
+            CouponResponse2 actual = couponService.findById(expected.getId());
+
+            assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+        }
+
+        @Test
+        @DisplayName("존재하지 않는 쿠폰을 조회할 경우 예외가 발생한다.")
+        void findById_notFound() {
+            assertThatThrownBy(() -> couponService.findById(1L))
+                    .isInstanceOf(CouponNotFoundException.class);
         }
     }
 
