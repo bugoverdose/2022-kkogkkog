@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface CouponRepository extends JpaRepository<Coupon, Long> {
 
     List<Coupon> findAllBySender(Member sender);
+
+    List<Coupon> findAllByReceiver(Member receiver);
 }

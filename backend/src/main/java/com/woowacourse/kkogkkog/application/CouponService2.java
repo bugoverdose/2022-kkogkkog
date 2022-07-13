@@ -66,4 +66,11 @@ public class CouponService2 {
         return memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFoundException::new);
     }
+
+    public List<CouponResponse2> findAllByReceiver(Long receiverId) {
+        return couponRepository.findAllByReceiver(findMember(receiverId))
+                .stream()
+                .map(CouponResponse2::of)
+                .collect(Collectors.toList());
+    }
 }

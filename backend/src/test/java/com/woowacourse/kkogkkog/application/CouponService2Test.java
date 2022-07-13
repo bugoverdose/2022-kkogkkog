@@ -77,7 +77,6 @@ public class CouponService2Test extends DatabaseTest {
         }
     }
 
-
     @DisplayName("사용자가 보낸 쿠폰들이 조회된다.")
     @Nested
     class FindBySenderTest {
@@ -99,11 +98,42 @@ public class CouponService2Test extends DatabaseTest {
             couponService.save(toCouponSaveRequest(정, List.of(아서, 레오)));
             Long senderId = 루키.getId();
 
-            List<Long> actual = couponService.findAllBySender(루키.getId())
+            List<Long> actual = couponService.findAllBySender(senderId)
                     .stream().map(CouponResponse2::getSender)
                     .map(CouponMemberResponse::getId)
                     .collect(Collectors.toList());
             List<Long> expected = List.of(senderId, senderId, senderId);
+
+            assertThat(actual).isEqualTo(expected);
+        }
+    }
+
+    @DisplayName("사용자가 받은 쿠폰들이 조회된다.")
+    @Nested
+    class FindByReceiverTest {
+
+        @DisplayName("조회되는 쿠폰 개수 확인")
+        @Test
+        void couponCount() {
+            couponService.save(toCouponSaveRequest(아서, List.of(정, 레오)));
+            couponService.save(toCouponSaveRequest(레오, List.of(정, 아서)));
+            List<CouponResponse2> actual = couponService.findAllByReceiver(정.getId());
+
+            assertThat(actual.size()).isEqualTo(2);
+        }
+
+        @DisplayName("조회되는 쿠폰의 받은 사람 정보 확인")
+        @Test
+        void receiverId() {
+            couponService.save(toCouponSaveRequest(아서, List.of(정, 레오)));
+            couponService.save(toCouponSaveRequest(레오, List.of(정, 아서)));
+            Long receiverId = 정.getId();
+
+            List<Long> actual = couponService.findAllByReceiver(receiverId)
+                    .stream().map(CouponResponse2::getReceiver)
+                    .map(CouponMemberResponse::getId)
+                    .collect(Collectors.toList());
+            List<Long> expected = List.of(receiverId, receiverId);
 
             assertThat(actual).isEqualTo(expected);
         }
