@@ -23,25 +23,25 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class CouponService2Test extends DatabaseTest {
 
-    private static final Member 루키 = new Member(1L, "루키");
-    private static final Member 아서 = new Member(2L, "아서");
-    private static final Member 정 = new Member(3L, "정");
-    private static final Member 레오 = new Member(4L, "레오");
-
     @Autowired
     private CouponService2 couponService;
 
     @Autowired
     private MemberRepository memberRepository;
 
+    private Member 루키 = new Member(null, "루키");
+    private Member 아서 = new Member(null, "아서");
+    private Member 정 = new Member(null, "정");
+    private Member 레오 = new Member(null, "레오");
+
     @Override
     @BeforeEach
     protected void setUp() {
         super.setUp();
-        memberRepository.save(루키);
-        memberRepository.save(아서);
-        memberRepository.save(정);
         memberRepository.save(레오);
+        memberRepository.save(아서);
+        memberRepository.save(루키);
+        memberRepository.save(정);
     }
 
     @DisplayName("사용자가 보낸 쿠폰들을 조회할 수 있다.")
