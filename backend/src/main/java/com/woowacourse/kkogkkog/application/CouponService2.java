@@ -1,7 +1,7 @@
 package com.woowacourse.kkogkkog.application;
 
 import com.woowacourse.kkogkkog.application.dto.CouponSaveRequest;
-import com.woowacourse.kkogkkog.application.dto.CouponSaveResponse;
+import com.woowacourse.kkogkkog.application.dto.CouponResponse2;
 import com.woowacourse.kkogkkog.domain.Coupon;
 import com.woowacourse.kkogkkog.domain.CouponStatus;
 import com.woowacourse.kkogkkog.domain.CouponType;
@@ -26,17 +26,16 @@ public class CouponService2 {
         this.memberRepository = memberRepository;
     }
 
-    public List<CouponSaveResponse> save(CouponSaveRequest couponSaveRequest) {
+    public List<CouponResponse2> save(CouponSaveRequest couponSaveRequest) {
         List<Coupon> coupons = toCoupons(couponSaveRequest);
         List<Coupon> savedCoupons = couponRepository.saveAll(coupons);
         return savedCoupons.stream()
-                .map(CouponSaveResponse::of)
+                .map(CouponResponse2::of)
                 .collect(Collectors.toList());
     }
 
     private List<Coupon> toCoupons(CouponSaveRequest couponSaveRequest) {
-        Member sender = memberRepository.findById(couponSaveRequest.getSenderId())
-                .orElseThrow(MemberNotFoundException::new);
+        Member sender = findMember(couponSaveRequest.getSenderId());
         List<Member> receivers = findMembers(couponSaveRequest.getReceivers());
         String modifier = couponSaveRequest.getModifier();
         String message = couponSaveRequest.getMessage();
@@ -54,5 +53,17 @@ public class CouponService2 {
             throw new MemberNotFoundException();
         }
         return receivers;
+    }
+
+    public List<CouponResponse2> findAllBySender(Long senderId) {
+        return couponRepository.findAllBySender(findMember(senderId))
+                .stream()
+                .map(CouponResponse2::of)
+                .collect(Collectors.toList());
+    }
+
+    private Member findMember(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(MemberNotFoundException::new);
     }
 }

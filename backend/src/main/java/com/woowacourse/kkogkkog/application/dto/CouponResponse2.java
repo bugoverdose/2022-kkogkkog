@@ -1,14 +1,13 @@
 package com.woowacourse.kkogkkog.application.dto;
 
 import com.woowacourse.kkogkkog.domain.Coupon;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class CouponSaveResponse {
+public class CouponResponse2 {
 
     private Long id;
     private CouponMemberResponse sender;
@@ -19,9 +18,9 @@ public class CouponSaveResponse {
     private String couponType;
     private String couponStatus;
 
-    public CouponSaveResponse(Long id, CouponMemberResponse sender,
-                              CouponMemberResponse receiver, String modifier, String message,
-                              String backgroundColor, String couponType, String couponStatus) {
+    public CouponResponse2(Long id, CouponMemberResponse sender,
+                           CouponMemberResponse receiver, String modifier, String message,
+                           String backgroundColor, String couponType, String couponStatus) {
         this.id = id;
         this.sender = sender;
         this.receiver = receiver;
@@ -32,8 +31,8 @@ public class CouponSaveResponse {
         this.couponStatus = couponStatus;
     }
 
-    public static CouponSaveResponse of(Coupon coupon) {
-        return new CouponSaveResponse(
+    public static CouponResponse2 of(Coupon coupon) {
+        return new CouponResponse2(
                 coupon.getId(),
                 CouponMemberResponse.of(coupon.getSender()),
                 CouponMemberResponse.of(coupon.getReceiver()),
