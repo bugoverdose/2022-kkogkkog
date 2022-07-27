@@ -1,0 +1,29 @@
+name: Frontend Test & Build
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+    types: [opened, reopened]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: ./frontend
+
+    steps:
+      - name: Setup Node.js on runner
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16.1.0"
+
+      - name: Install dependencies with resolutions
+        run: npm install
+
+      - name: Build
+        run: yarn run build
+
