@@ -22,8 +22,7 @@ jobs:
           node-version: "16.1.0"
 
       - name: Install dependencies with resolutions
-        run: npm install
+        run: yarn
 
       - name: Build
-        run: yarn run build
-
+        run: yarn build
