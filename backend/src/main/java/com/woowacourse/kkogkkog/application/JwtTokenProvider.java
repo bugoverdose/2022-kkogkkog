@@ -36,6 +36,19 @@ public class JwtTokenProvider {
             .compact();
     }
 
+    public String unusedMethod(String payload) {
+        Claims claims = Jwts.claims().setSubject(payload);
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + validityInMilliseconds);
+
+        return Jwts.builder()
+            .setClaims(claims)
+            .setIssuedAt(now)
+            .setExpiration(validity)
+            .signWith(secretKey)
+            .compact();
+    }
+
     public String getValidatedPayload(String token) {
         try {
             return Jwts.parserBuilder()
